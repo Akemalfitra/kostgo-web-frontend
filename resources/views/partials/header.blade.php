@@ -7,12 +7,23 @@
         </a>
 
         {{-- Navigasi Desktop --}}
-        <div class="hidden md:flex space-x-6 items-center">
+        @auth
+            @if(Auth::user()->role === 'user')
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="{{ route('search') }}" class="text-gray-700 hover:text-kostgo-blue font-medium transition duration-200">Cari Kos</a>
+                <a href="{{ route('about') }}" class="text-gray-700 hover:text-kostgo-blue font-medium transition duration-200">Tentang Kami</a>
+                <a href="{{ route('help-center') }}" class="text-gray-700 hover:text-kostgo-blue font-medium transition duration-200">Pusat Bantuan</a>
+                <a href="{{ route('rent-kost') }}" class="text-gray-700 hover:text-kostgo-blue font-medium transition duration-200">Sewa Kos</a>
+            </div>
+            @endif
+        @else
+            <div class="hidden md:flex space-x-6 items-center">
             <a href="{{ route('search') }}" class="text-gray-700 hover:text-kostgo-blue font-medium transition duration-200">Cari Kos</a>
             <a href="{{ route('about') }}" class="text-gray-700 hover:text-kostgo-blue font-medium transition duration-200">Tentang Kami</a>
             <a href="{{ route('help-center') }}" class="text-gray-700 hover:text-kostgo-blue font-medium transition duration-200">Pusat Bantuan</a>
             <a href="{{ route('rent-kost') }}" class="text-gray-700 hover:text-kostgo-blue font-medium transition duration-200">Sewa Kos</a>
-        </div>
+            </div>
+        @endauth
 
         {{-- Autentikasi dan Promosikan Iklan --}}
         <div class="flex items-center space-x-4">

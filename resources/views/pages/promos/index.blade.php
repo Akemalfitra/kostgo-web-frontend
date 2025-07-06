@@ -16,7 +16,7 @@
             @foreach ($promos as $kost)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition duration-200">
                     @php
-                        $images = json_decode($kost->images, true);
+                        $images = json_decode($kost->image, true);
                         $firstImage = (!empty($images) && is_array($images) && isset($images[0])) ? asset('storage/' . $images[0]) : 'https://via.placeholder.com/400x300?text=Promo+Kos';
                     @endphp
                     <img src="{{ $firstImage }}" alt="{{ $kost->name }}" class="w-full h-48 object-cover">
@@ -34,7 +34,7 @@
         </div>
 
         <div class="mt-8 flex justify-center">
-            {{ $promos->links() }} {{-- Menampilkan link paginasi --}}
+            {{ $promos->links() }}
         </div>
     @endif
 </div>

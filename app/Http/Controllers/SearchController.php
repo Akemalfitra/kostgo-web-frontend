@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Kost; // Pastikan Anda mengimpor model Kost
+use App\Models\Kosts; // Pastikan Anda mengimpor model Kost
 
 class SearchController extends Controller
 {
@@ -14,7 +14,7 @@ class SearchController extends Controller
     {
         $lokasi = $request->input('lokasi');
 
-        $query = Kost::query();
+        $query = Kosts::query();
 
         if ($lokasi) {
             $query->where('city', 'like', '%' . $lokasi . '%')

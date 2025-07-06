@@ -22,7 +22,7 @@
             @foreach ($kosts as $kost)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition duration-200">
                     @php
-                        $images = json_decode($kost->images, true); // Decode sebagai array asosiatif
+                        $images = $kost->image; // Decode sebagai array asosiatif
                         $firstImage = 'https://via.placeholder.com/400x300?text=No+Image'; // Default jika tidak ada gambar
                         if (!empty($images) && is_array($images) && isset($images[0])) {
                             $firstImage = asset('storage/' . $images[0]);
@@ -34,7 +34,7 @@
                         <p class="text-gray-600 text-sm mb-1"><i class="fas fa-map-marker-alt mr-1 text-kostgo-blue"></i> {{ $kost->address }}, {{ $kost->city }}</p>
                         <p class="text-gray-600 text-sm mb-3">Tipe: <span class="font-medium text-kostgo-blue">{{ ucfirst($kost->type) }}</span></p>
                         <div class="text-2xl font-bold text-green-600 mb-4">Rp{{ number_format($kost->price, 0, ',', '.') }} <span class="text-base font-normal text-gray-500">/bulan</span></div>
-                        <a href="#" class="inline-block bg-kostgo-orange hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                        <a href={{ route('kosts.show', $kost->slug) }} class="inline-block bg-kostgo-orange hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
                             Lihat Detail
                         </a>
                     </div>

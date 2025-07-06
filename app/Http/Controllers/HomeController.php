@@ -11,6 +11,6 @@ class HomeController extends Controller
     {
         // Anda bisa mengambil data kos populer di sini jika dibutuhkan di halaman utama
         // Untuk saat ini, kita biarkan saja menampilkan view welcome
-        return view('welcome');
+        return view('welcome'); // Ganti dengan view yang sesuai
     }
 }

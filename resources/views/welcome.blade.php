@@ -72,18 +72,18 @@
         @php
             // Ambil beberapa kos secara acak dari database untuk dijadikan contoh promo
             // Anda bisa menyesuaikan jumlahnya (misal limit(6))
-            $promoKosts = App\Models\Kost::inRandomOrder()->limit(6)->get();
+            $promoKosts = App\Models\Kosts::inRandomOrder()->limit(6)->get();
         @endphp
 
         @forelse($promoKosts as $kost)
             <div class="flex-shrink-0 w-64 bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition duration-200">
                 @php
-                    $images = json_decode($kost->images, true);
+                    $images = $kost->image;
                     $firstImage = (!empty($images) && is_array($images) && isset($images[0])) ? asset('storage/' . $images[0]) : 'https://via.placeholder.com/256x160?text=Kos+Promo';
                     $originalPrice = $kost->price;
-                    $discountAmount = 100000; // Contoh diskon
+                    $discountAmount = 100000;
                     $promoPrice = $originalPrice - $discountAmount;
-                    if ($promoPrice < 0) $promoPrice = 0; // Pastikan harga tidak negatif
+                    if ($promoPrice < 0) $promoPrice = 0;
                 @endphp
                 <img src="{{ $firstImage }}" alt="{{ $kost->name }}" class="w-full h-40 object-cover">
                 <div class="p-3">
@@ -95,7 +95,8 @@
                             <span class="text-gray-500 line-through mr-2">Rp{{ number_format($originalPrice, 0, ',', '.') }}</span>
                             <span class="text-green-600 font-bold text-lg">Rp{{ number_format($promoPrice, 0, ',', '.') }}</span>
                         </div>
-                        <a href="#" class="text-kostgo-blue hover:underline">Detail</a>
+                       
+                        <a href="{{ route('kosts.show', $kost->slug) }}" class="text-kostgo-blue hover:underline">Detail</a>
                     </div>
                 </div>
             </div>
@@ -118,13 +119,13 @@
             // Ambil 4 kos terpopuler atau terbaru untuk ditampilkan di homepage
             // Anda mungkin perlu memodifikasi HomeController@index untuk mengambil data ini
             // Untuk demo, kita pakai data dummy
-            $popularKosts = App\Models\Kost::inRandomOrder()->limit(4)->get(); // Mengambil 4 kos acak
+            $popularKosts = App\Models\Kosts::inRandomOrder()->limit(4)->get(); // Mengambil 4 kos acak
         @endphp
 
         @forelse($popularKosts as $kost)
             <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition duration-200">
                 @php
-                    $images = json_decode($kost->images, true);
+                    $images = $kost->image;
                     $firstImage = (!empty($images) && is_array($images) && isset($images[0])) ? asset('storage/' . $images[0]) : 'https://via.placeholder.com/400x300?text=No+Image';
                 @endphp
                 <img src="{{ $firstImage }}" alt="{{ $kost->name }}" class="w-full h-48 object-cover">
@@ -132,7 +133,7 @@
                     <h3 class="text-lg font-semibold text-kostgo-dark-gray mb-1">{{ $kost->name }}</h3>
                     <p class="text-sm text-gray-600 mb-2">{{ $kost->address }}, {{ $kost->city }}</p>
                     <div class="text-xl font-bold text-green-600 mb-3">Rp{{ number_format($kost->price, 0, ',', '.') }}</div>
-                    <a href="#" class="inline-block bg-kostgo-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition duration-300">
+                    <a href={{ route('kosts.show', $kost->slug) }} class="inline-block bg-kostgo-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition duration-300">
                         Lihat Detail
                     </a>
                 </div>
