@@ -19,8 +19,8 @@ Route::middleware(['auth'])->group(function () {
     // Rute untuk booking (jika Anda akan mengimplementasikannya)
 });
 
-Route::get('/kost/{slug}', [KostController::class, 'show'])->name('kosts.show');
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/kost/{slug}', [KostController::class, 'show'])->name('kosts.show');
 Route::get('/cari', [SearchController::class, 'index'])->name('search');
 Route::get('/dashboard', function () {
     return view('welcome');

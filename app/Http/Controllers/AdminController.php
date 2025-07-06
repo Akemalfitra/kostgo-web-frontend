@@ -53,16 +53,14 @@ class AdminController extends Controller
             'owner_whatsapp' => 'nullable|string|max:255',
         ]);
 
-        $imagePaths = []; // Inisialisasi array untuk menyimpan path semua gambar
+        $imagePaths = []; // Inisialisasi array untuk menyimpan nama file gambar saja
         if ($request->hasFile('images')) {
-            // Hanya ambil gambar pertama jika ada banyak, atau gambar tunggal
             $uploadedImages = $request->file('images');
             $imageToStore = is_array($uploadedImages) ? $uploadedImages[0] : $uploadedImages;
 
             if ($imageToStore) {
-                // Simpan file ke public/kosts dan dapatkan path relatif dari public
-                $path = $imageToStore->store('public/kosts'); // Path akan seperti 'public/kosts/namafile.png'
-                $imagePaths[] = Str::after($path, 'public/'); // Ambil 'kosts/namafile.png'
+                $path = $imageToStore->store('kosts');
+                $imagePaths[] = $path;
             }
         }
 
@@ -70,7 +68,7 @@ class AdminController extends Controller
         $slug = Str::slug($request->name);
 
         // Simpan data kos
-        $kost = Kosts::create([ // Menggunakan Kosts sesuai model Anda
+        $kost = Kosts::create([
             'user_id' => auth()->id(),
             'name' => $request->name,
             'slug' => $slug,
@@ -80,7 +78,7 @@ class AdminController extends Controller
             'price' => $request->price,
             'type' => $request->type,
             'facilities' => json_encode($request->facilities),
-            'images' => json_encode($imagePaths), // Simpan array path gambar sebagai JSON string di kolom 'images'
+            'image' => $imagePaths,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'owner_phone' => $request->owner_phone,
@@ -120,25 +118,27 @@ class AdminController extends Controller
             'longitude' => 'nullable|numeric',
             'owner_phone' => 'nullable|string|max:255',
             'owner_whatsapp' => 'nullable|string|max:255',
-            'existing_images' => 'nullable|array', // Untuk gambar yang sudah ada dan tidak dihapus
+            'existing_images' => 'nullable|array', 
             'existing_images.*' => 'string',
         ]);
 
-        $currentImages = json_decode($kost->images, true) ?? [];
-        $updatedImages = $request->input('existing_images', []); // Gambar yang dipertahankan
+        $currentImages = is_array($kost->image) ? $kost->image : json_decode($kost->image, true);
+        $updatedImages = $request->input('existing_images', []); 
 
-        // Hapus gambar lama yang tidak ada di existing_images
         foreach ($currentImages as $image) {
             if (!in_array($image, $updatedImages)) {
-                Storage::delete(Str::after($image, '/storage/')); // Hapus dari storage
+                Storage::delete(Str::after($image, '/kosts/'));
             }
         }
 
-        // Upload gambar baru
+        // Upload gambar baru (hanya ambil gambar pertama)
         if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('public/images');
-                $updatedImages[] = Storage::url($path);
+            $uploadedImages = $request->file('images');
+            $imageToStore = is_array($uploadedImages) ? $uploadedImages[0] : $uploadedImages;
+
+            if ($imageToStore) {
+                $path = $imageToStore->store('kosts');
+                $updatedImages[] = $path;
             }
         }
 
@@ -153,7 +153,7 @@ class AdminController extends Controller
             'price' => $request->price,
             'type' => $request->type,
             'facilities' => json_encode($request->facilities),
-            'image' => $updatedImages,
+            'image' => json_encode($updatedImages),
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'owner_phone' => $request->owner_phone,
@@ -171,9 +171,9 @@ class AdminController extends Controller
         }
 
         // Hapus gambar terkait sebelum menghapus data kos
-        $images = json_decode($kost->images, true) ?? [];
+        $images = is_array($kost->image) ? $kost->image : json_decode($kost->image, true);
         foreach ($images as $image) {
-            Storage::delete(Str::after($image, '/storage/'));
+            Storage::delete(Str::after($image, '/kosts/'));
         }
 
         $kost->delete();

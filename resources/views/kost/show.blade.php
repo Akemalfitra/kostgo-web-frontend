@@ -10,7 +10,7 @@
         {{-- Tampilan Gambar Tunggal --}}
         <div class="relative">
             @php
-            $images = $kost->image;
+             $images = is_array($kost->image) ? $kost->image : json_decode($kost->image, true);
             @endphp
             @if (!empty($images) && is_array($images) && count($images) > 0)
             <img src="{{ asset('storage/' . $images[0]) }}" alt="Gambar Kos {{ $kost->name }}" class="w-full h-96 object-cover bg-gray-200">

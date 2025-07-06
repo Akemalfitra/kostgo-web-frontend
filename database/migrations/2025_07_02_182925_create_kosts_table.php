@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('type')->comment('putra, putri, campur'); // Jenis kos
             $table->decimal('price', 10, 0); // Harga per bulan
             $table->json('facilities')->nullable(); // Fasilitas (contoh: AC, WiFi, KM Dalam) dalam format JSON array
-            $table->string('image')->nullable(); // Path gambar dalam format JSON array
+            $table->string('image');
             $table->double('latitude', 10, 7)->nullable(); // Koordinat peta
             $table->double('longitude', 10, 7)->nullable(); // Koordinat peta
             $table->string('owner_phone')->nullable();

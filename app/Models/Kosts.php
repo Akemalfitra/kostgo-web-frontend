@@ -24,7 +24,7 @@ class Kosts extends Model // Ubah dari Kosts menjadi Kost
         'price',
         'type',
         'facilities',
-        'images',
+        'image',
         'latitude',
         'longitude',
         'owner_phone',

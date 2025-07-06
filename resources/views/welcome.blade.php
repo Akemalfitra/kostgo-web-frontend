@@ -69,16 +69,11 @@
         <a href="{{ route('promos.index') }}" class="text-kostgo-blue text-base font-semibold hover:underline">Lihat Semua Promo</a>
     </h2>
     <div class="flex overflow-x-auto scrollbar-hide space-x-4 pb-4">
-        @php
-            // Ambil beberapa kos secara acak dari database untuk dijadikan contoh promo
-            // Anda bisa menyesuaikan jumlahnya (misal limit(6))
-            $promoKosts = App\Models\Kosts::inRandomOrder()->limit(6)->get();
-        @endphp
 
         @forelse($promoKosts as $kost)
             <div class="flex-shrink-0 w-64 bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition duration-200">
                 @php
-                    $images = $kost->image;
+                    $images = is_array($kost->image) ? $kost->image : json_decode($kost->image, true);
                     $firstImage = (!empty($images) && is_array($images) && isset($images[0])) ? asset('storage/' . $images[0]) : 'https://via.placeholder.com/256x160?text=Kos+Promo';
                     $originalPrice = $kost->price;
                     $discountAmount = 100000;
@@ -115,17 +110,10 @@
         <a href="{{ route('search') }}" class="text-kostgo-blue text-base font-semibold hover:underline">Lihat Semua Kos</a>
     </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        @php
-            // Ambil 4 kos terpopuler atau terbaru untuk ditampilkan di homepage
-            // Anda mungkin perlu memodifikasi HomeController@index untuk mengambil data ini
-            // Untuk demo, kita pakai data dummy
-            $popularKosts = App\Models\Kosts::inRandomOrder()->limit(4)->get(); // Mengambil 4 kos acak
-        @endphp
-
         @forelse($popularKosts as $kost)
             <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition duration-200">
                 @php
-                    $images = $kost->image;
+                    $images = is_array($kost->image) ? $kost->image : json_decode($kost->image, true);
                     $firstImage = (!empty($images) && is_array($images) && isset($images[0])) ? asset('storage/' . $images[0]) : 'https://via.placeholder.com/400x300?text=No+Image';
                 @endphp
                 <img src="{{ $firstImage }}" alt="{{ $kost->name }}" class="w-full h-48 object-cover">

@@ -83,7 +83,7 @@
                                     <a href="{{ route('kosts.edit', $kost->slug) }}" class="text-kostgo-blue hover:text-blue-900 mr-3">Edit</a>
                                     {{-- Asumsi ada relasi kamar atau halaman terpisah untuk mengelola kamar --}}
                                     <a href="{{ route('kosts.rooms', $kost->slug) }}" class="text-green-600 hover:text-green-900 mr-3">Kamar</a>
-                                    <form action="{{ route('kosts.destroy', $kost->id) }}" method="POST" class="inline-block">
+                                    <form action="{{ route('kosts.destroy', $kost->slug) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Apakah Anda yakin ingin menghapus kos ini?')">Hapus</button>
